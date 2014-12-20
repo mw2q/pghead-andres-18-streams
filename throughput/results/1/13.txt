@@ -1,0 +1,74 @@
+BEGIN;
+BEGIN
+select
+	c_count,
+	count(*) as custdist
+from
+	(
+		select
+			c_custkey,
+			count(o_orderkey)
+		from
+			customer left outer join orders on
+				c_custkey = o_custkey
+				and o_comment not like '%unusual%accounts%'
+		group by
+			c_custkey
+	) as c_orders (c_custkey, c_count)
+group by
+	c_count
+order by
+	custdist desc,
+	c_count desc;
+ c_count | custdist 
+---------+----------
+       0 |   500022
+      10 |    66161
+       9 |    65305
+      11 |    62278
+       8 |    58528
+      12 |    55543
+      13 |    49947
+      19 |    46692
+      18 |    46436
+       7 |    46353
+      14 |    45443
+      20 |    45155
+      17 |    45008
+      16 |    43898
+      15 |    43604
+      21 |    42338
+      22 |    38057
+       6 |    32925
+      23 |    32366
+      24 |    26736
+      25 |    21187
+       5 |    19703
+      26 |    15967
+      27 |    11694
+       4 |     9965
+      28 |     8192
+      29 |     5623
+       3 |     4012
+      30 |     3686
+      31 |     2306
+      32 |     1476
+       2 |     1204
+      33 |      853
+      34 |      505
+      35 |      302
+       1 |      236
+      36 |      132
+      37 |       71
+      38 |       49
+      39 |       17
+      40 |       12
+      42 |        5
+      41 |        3
+      45 |        2
+      43 |        2
+      44 |        1
+(46 rows)
+
+COMMIT;
+COMMIT
